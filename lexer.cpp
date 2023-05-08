@@ -1,7 +1,8 @@
-//g++ -c lexer.cpp
+// g++ -c lexer.cpp
 
 #include <iostream>
 #include <memory>
+#include <vector>
 
 enum class TokenType
 {
@@ -49,17 +50,20 @@ class Lexer
 public:
     Lexer(const std::string &source) : source_(source), position_(0) {}
 
-    Token getNextToken();
+    Token getNextToken() { return tokens[++parserPos]; };
     // Add other methods as needed
 
 private:
     std::string source_;
     std::size_t position_;
 
+    std::vector<Token> tokens;
+    int parserPos = 0;
+
     std::string lower(std::string str)
     {
         std::string lowered;
-        for (int i = 0; i < str.size(); ++i) 
+        for (int i = 0; i < str.size(); ++i)
         {
             lowered += std::tolower(str[i]);
         }
@@ -81,69 +85,6 @@ private:
 
     TokenType getKeywordType(const std::string &identifier)
     {
-        if (lower(identifier) == "if")
-        {
-            return TokenType::KEYWORD_IF;
-        }
-        else if (lower(identifier) == "else")
-        {
-            return TokenType::KEYWORD_ELSE;
-        }
-        else if (lower(identifier) == "elf")
-        {
-            return TokenType::KEYWORD_ELF;
-        }
-        else if (lower(identifier) == "do")
-        {
-            return TokenType::KEYWORD_DO;
-        }
-        else if (lower(identifier) == "while")
-        {
-            return TokenType::KEYWORD_WHILE;
-        }
-        else if (lower(identifier) == "for")
-        {
-            return TokenType::KEYWORD_FOR;
-        }
-        else if (lower(identifier) == "true")
-        {
-            return TokenType::KEYWORD_TRUE;
-        }
-        else if (lower(identifier) == "false")
-        {
-            return TokenType::KEYWORD_FALSE;
-        }
-        else if (lower(identifier) == "int")
-        {
-            return TokenType::KEYWORD_INTEGER;
-        }
-        else if (lower(identifier) == "bool" | lower(identifier) == "boolean")
-        {
-            return TokenType::KEYWORD_BOOLEAN;
-        }
-        else if (lower(identifier) == "char")
-        {
-            return TokenType::KEYWORD_CHAR;
-        }
-        else if (lower(identifier) == "str")
-        {
-            return TokenType::KEYWORD_STR;
-        }
-        else if (lower(identifier) == "string")
-        {
-            return TokenType::KEYWORD_STRING;
-        }
-        else if (lower(identifier) == "float")
-        {
-            return TokenType::KEYWORD_FLOAT;
-        }
-        else if (lower(identifier) == "double")
-        {
-            return TokenType::KEYWORD_DOUBLE;
-        }
-        // Add other keyword checks as needed
-
-        return TokenType::IDENTIFIER;
     }
 
     Token readString()
@@ -154,6 +95,7 @@ private:
             identifier += getNextChar();
         }
         TokenType type = getKeywordType(identifier);
+        tokens.push_back({type, identifier});
         return {type, identifier};
     }
 
@@ -164,9 +106,77 @@ private:
         {
             number += getNextChar();
         }
+        tokens.push_back({TokenType::INTEGER, number});
         return {TokenType::INTEGER, number};
     }
 };
+
+TokenType Lexer::getKeywordType(const std::string &identifier)
+{
+    if (lower(identifier) == "if")
+    {
+        return TokenType::KEYWORD_IF;
+    }
+    else if (lower(identifier) == "else")
+    {
+        return TokenType::KEYWORD_ELSE;
+    }
+    else if (lower(identifier) == "elf")
+    {
+        return TokenType::KEYWORD_ELF;
+    }
+    else if (lower(identifier) == "do")
+    {
+        return TokenType::KEYWORD_DO;
+    }
+    else if (lower(identifier) == "while")
+    {
+        return TokenType::KEYWORD_WHILE;
+    }
+    else if (lower(identifier) == "for")
+    {
+        return TokenType::KEYWORD_FOR;
+    }
+    else if (lower(identifier) == "true")
+    {
+        return TokenType::KEYWORD_TRUE;
+    }
+    else if (lower(identifier) == "false")
+    {
+        return TokenType::KEYWORD_FALSE;
+    }
+    else if (lower(identifier) == "int")
+    {
+        return TokenType::KEYWORD_INTEGER;
+    }
+    else if (lower(identifier) == "bool" | lower(identifier) == "boolean")
+    {
+        return TokenType::KEYWORD_BOOLEAN;
+    }
+    else if (lower(identifier) == "char")
+    {
+        return TokenType::KEYWORD_CHAR;
+    }
+    else if (lower(identifier) == "str")
+    {
+        return TokenType::KEYWORD_STR;
+    }
+    else if (lower(identifier) == "string")
+    {
+        return TokenType::KEYWORD_STRING;
+    }
+    else if (lower(identifier) == "float")
+    {
+        return TokenType::KEYWORD_FLOAT;
+    }
+    else if (lower(identifier) == "double")
+    {
+        return TokenType::KEYWORD_DOUBLE;
+    }
+    // Add other keyword checks as needed
+
+    return TokenType::IDENTIFIER;
+}
 
 Token Lexer::getNextToken()
 {
@@ -182,28 +192,40 @@ Token Lexer::getNextToken()
     switch (currentChar)
     {
     case '+':
+        tokens.push_back({TokenType::OPERATOR_ADD, "+"});
         return {TokenType::OPERATOR_ADD, "+"};
     case '-':
+        tokens.push_back({TokenType::OPERATOR_SUBTRACT, "-"});
         return {TokenType::OPERATOR_SUBTRACT, "-"};
     case '*':
+        tokens.push_back({TokenType::OPERATOR_MULTIPLY, "*"});
         return {TokenType::OPERATOR_MULTIPLY, "*"};
     case '/':
+        tokens.push_back({TokenType::OPERATOR_DIVIDE, "/"});
         return {TokenType::OPERATOR_DIVIDE, "/"};
     case '(':
+        tokens.push_back({TokenType::OPEN_PAREN, "("});
         return {TokenType::OPEN_PAREN, "("};
     case ')':
+        tokens.push_back({TokenType::CLOSE_PAREN, ")"});
         return {TokenType::CLOSE_PAREN, ")"};
     case '{':
+        tokens.push_back({TokenType::OPEN_CURL, "{"});
         return {TokenType::OPEN_CURL, "{"};
     case '}':
+        tokens.push_back({TokenType::CLOSE_CURL, "}"});
         return {TokenType::CLOSE_CURL, "}"};
     case '[':
+        tokens.push_back({TokenType::OPEN_SQUARE, "["});
         return {TokenType::OPEN_SQUARE, "["};
     case ']':
+        tokens.push_back({TokenType::CLOSE_SQUARE, "]"});
         return {TokenType::CLOSE_SQUARE, "]"};
     case '"':
+        tokens.push_back({TokenType::QUOTE, "\""});
         return {TokenType::QUOTE, "\""};
     case ';':
+        tokens.push_back({TokenType::END_LINE, ";"});
         return {TokenType::END_LINE, ";"};
     }
 

@@ -11,10 +11,18 @@ public:
 
 class NumberExprNode : public ExprNode {
 public:
-    NumberExprNode(double value) : value_(value) {}
-
+    explicit NumberExprNode(double value) : value_(value) {}
+    double getValue() const { return value_; }
 private:
     double value_;
+};
+
+class VariableExprNode : public ExprNode {
+public:
+    VariableExprNode(const std::string& name) : name_(name) {}
+
+private:
+    std::string name_;
 };
 
 class BinaryExprNode : public ExprNode {
@@ -22,36 +30,18 @@ public:
     BinaryExprNode(TokenType op, std::unique_ptr<ExprNode> lhs, std::unique_ptr<ExprNode> rhs)
         : op_(op), lhs_(std::move(lhs)), rhs_(std::move(rhs)) {}
 
+    TokenType getOperator() const { return op_; }
+    const ExprNode* getLeft() const { return lhs_.get(); }
+    const ExprNode* getRight() const { return rhs_.get(); }
+
 private:
     TokenType op_;
     std::unique_ptr<ExprNode> lhs_;
     std::unique_ptr<ExprNode> rhs_;
 };
 
-class Parser {
-public:
-    explicit Parser(Lexer& lexer) : lexer_(lexer), currentToken_(lexer.getNextToken()) {}
-
-    std::unique_ptr<ExprNode> parse();
-
-private:
-    Lexer& lexer_;
-    Token currentToken_;
-
-    std::unique_ptr<ExprNode> parseExpression() {
-        // Implement expression parsing
-    }
-
-    std::unique_ptr<ExprNode> parsePrimary() {
-        // Implement primary expression parsing
-    }
-
-    std::unique_ptr<ExprNode> parseBinary(int precedence) {
-        // Implement binary expression parsing
-    }
+class StatementNode : public ExprNode {
 };
-
-
 
 #pragma region testLexer
 // int main()

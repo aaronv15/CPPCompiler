@@ -2,6 +2,7 @@
 #define LEXER_H
 
 #include <string>
+#include <vector>
 
 enum class TokenType
 {
@@ -48,10 +49,12 @@ class Lexer
 {
 public:
     Lexer(const std::string &source) : source_(source), position_(0) {};
-    Token getNextToken();
+    Token getNextToken() { return tokens[++parserPos]; };
 private:
     std::string source_;
     std::size_t position_;
+    std::vector<Token> tokens;
+    int parserPos;
 
     std::string lower(std::string str);
     char getNextChar();
