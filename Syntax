@@ -1,0 +1,76 @@
+################################################################
+file rules:
+"_*" at the beginning of a line specifies that it is case sensitive. if not specified, assume that it is not case sensitive.
+"\nc" means not case sensitive
+"\fl" means to be implemented much later. severity is dictated by a number - from one, lowest, to ten, heighest.
+"\b" means can be used forwards and backwards
+when "OR" is used it is specifying that it can be one or the other
+################################################################
+
+Keywords:
+	if                  - cpp style (for now)
+	else                - cpp style (for now)
+	elf                 - cpp style (for now)
+	for                 - cpp style (for now)
+	do                  - cpp style (for now)
+	while               - cpp style (for now)
+	true                -
+	false               -
+	go x        		- goes to a specific peice of code who's line starts with \go x (x is used in place of a number) \fl7
+	async				- specifies if a method is synchronous or not
+	dispatch            - can be used before calling a method to run that method in a new thread. returns the thread ID \fl7
+	wait x				- waits for a thread with ID x to finish before proceeding \fl	
+	public				- can be accessed from any file
+	protected			- 
+	private				- if used in a class, can only be accessed only by the class it is used in. if used in a class definition,
+						- can only be accessed from within the same file
+	static				- if a variable in a class is declared static, any time a new object of type class is created,
+						- it has a pointer to the static variable. if it is declared in a method, any time the method is called,
+						- it uses a pointer to that variable
+	class				- used to define a class
+	func				- used to define a function that has any return type, is public, and if it does not return, returns None \fl7
+	obj					- can hold any user defined object \fl7
+	var					- can hold any system defined type or object \fl7
+	void 				- none type
+	none				- none type
+	return				- returns from a method
+	bool OR boolean		- a single bit that is either a one or a zero
+	int					- normal sized integer
+	big int				- twice as big as int \fl3
+	big big int			- twice as big as big int \fl3
+	float				- normal sized float
+	double				- twice as big as float
+	big double			- twice as big as double \fl3
+	char				- a single character
+	string				- a fixed length string
+	str					- a dynamic length string
+	struct				- cpp style struct
+	list[type]			- a dynamic array of type type. \b[type] \fl5
+	fllist[type]		- a forward linked list of type type. \b[type] \fl5
+	bllist[type]		- a backwards linked list of type type. \b[type] \fl5
+	dllist[type]		- a doubly linked list of type type. \b[type] \fl5
+	dict				- a dictionary \fl7
+	type[]				- an array of type type. \b[]
+	other types			- placeholder for other types
+	and OR &&   		- and
+	or OR || 			- or
+	eq OR == 			- equals
+	neq OR !=			- not equals
+	is OR ===			- occupies the same space in memory
+	not OR !			- not
+	pls OR + 			- plus
+	mns OR - 			- minus
+	mul OR * 			- times
+	div OR / 			- divide
+	pow OR ^ 			- x to the power of \fl3
+	rt OR // 			- the x root of \fl3
+	type\ptr OR type*	- a pointer to an object ot type type in memory. \b* \fl2
+	var\rf or var&		- pass a variable by refrence \b& \fl2
+	=					- assignment operator
+	""					- used to denote a string if more than one letter is supplied, else a char
+	\					- escape character
+	()					- code block
+	[]					- used to define the type of a list or to specify the length of an array
+	{}					- code block
+	;					- end of statement (for now)
+	_					- used before a variable. means it is case sensitive
